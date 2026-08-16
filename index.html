@@ -4,322 +4,87 @@
 <meta charset="UTF-8">
 <title>FF Icon Extractor</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <style>
-:root{
---bg:#000;
---card:#0b0b0b;
---border:#1a1a1a;
---text:#fff;
---muted:#9a9a9a;
---danger:#2b0000;
---danger-border:#550000;
-}
-.footer{
-  padding:10px 0;
-  text-align:center;
-  font-size:11px;
-  color:#777;
-  border-top:1px solid #1a1a1a;
-  background:#000;
-}
+:root{--bg:#000;--card:#0b0b0b;--border:#1a1a1a;--text:#fff;--muted:#9a9a9a;--danger:#2b0000;--danger-border:#550000}
 *{box-sizing:border-box;margin:0;padding:0}
-body{
-background:var(--bg);
-color:var(--text);
-font-family:system-ui,-apple-system,Segoe UI;
-}
-
-/* HEADER */
-header{
-padding:12px 14px;
-font-size:16px;
-font-weight:700;
-border-bottom:1px solid var(--border);
-}
-
-/* CONTROLS */
-.controls{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:8px;
-padding:10px;
-border-bottom:1px solid var(--border);
-}
-
-.controls select,
-.controls button{
-padding:10px;
-border-radius:8px;
-background:#000;
-border:1px solid var(--border);
-color:var(--text);
-font-size:13px;
-}
-
-.controls button.scan{
-background:#fff;
-color:#000;
-font-weight:600;
-}
-
-.controls button.stop{
-background:var(--danger);
-color:#fff;
-border:1px solid var(--danger-border);
-}
-.controls button.stop:hover{background:#3d0000}
-
-.controls button:disabled{opacity:.4}
-
-/* SIDE HEADING */
-.side-heading{
-padding:10px 12px;
-border-bottom:1px solid var(--border);
-}
-.side-heading h2{font-size:15px;margin-bottom:2px}
-.side-heading p{font-size:12px;color:var(--muted)}
-
-/* STATUS */
-.status{
-padding:8px 12px;
-font-size:12px;
-color:var(--muted);
-border-bottom:1px solid var(--border);
-}
-
-/* PROGRESS */
-.progress{display:none;height:2px;background:var(--border)}
-.progress.show{display:block}
-.bar{height:100%;width:0%;background:#fff}
-
-/* GRID */
-.grid{
-padding:10px;
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(110px,1fr));
-gap:10px;
-}
-
-/* CARD */
-.card{
-background:var(--card);
-border:1px solid var(--border);
-border-radius:6px;
-padding:8px;
-text-align:center;
-}
-.card img{width:100%;height:70px;object-fit:contain}
-.id{margin-top:4px;font-size:11px;color:var(--muted)}
+body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+header{padding:12px 14px;font-size:16px;font-weight:700;border-bottom:1px solid var(--border)}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px;border-bottom:1px solid var(--border)}
+.controls select,.controls button{padding:10px;border-radius:8px;background:#000;border:1px solid var(--border);color:var(--text);font-size:13px}
+.controls button{cursor:pointer}.controls button.scan{background:#fff;color:#000;font-weight:600}.controls button.stop{background:var(--danger);color:#fff;border:1px solid var(--danger-border)}
+.controls button:disabled{opacity:.4;cursor:not-allowed}.side-heading{padding:10px 12px;border-bottom:1px solid var(--border)}
+.side-heading h2{font-size:15px;margin-bottom:2px}.side-heading p{font-size:12px;color:var(--muted)}
+.status{padding:8px 12px;font-size:12px;color:var(--muted);border-bottom:1px solid var(--border)}
+.progress{display:none;height:2px;background:var(--border)}.progress.show{display:block}.bar{height:100%;width:0%;background:#fff}
+.grid{padding:10px;display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:8px;text-align:center}.card img{width:100%;height:70px;object-fit:contain}.id{margin-top:4px;font-size:11px;color:var(--muted);word-break:break-all}
+.footer{padding:10px 0;text-align:center;font-size:11px;color:#777;border-top:1px solid var(--border);background:#000}
+@media(max-width:520px){.controls{grid-template-columns:1fr}.grid{grid-template-columns:repeat(auto-fill,minmax(95px,1fr))}}
 </style>
 </head>
-
 <body>
-
 <header>FF Icon Extractor</header>
-
 <div class="controls">
-  <select id="server">
-    <option value="advance">ADV</option>
-    <option value="live">LIVE</option>
-  </select>
-
-  <select id="ob"></select>
-  <select id="cat"></select>
-
-  <button class="scan" id="scanBtn">Scan</button>
-  <button class="stop" id="stopBtn">Stop</button>
-  <button onclick="clearGrid()">Clear</button>
+<select id="server" aria-label="Server"><option value="advance">ADV</option><option value="live">LIVE</option></select>
+<select id="ob" aria-label="OB version"></select>
+<select id="cat" aria-label="Asset category"></select>
+<button class="scan" id="scanBtn" type="button">Scan</button>
+<button class="stop" id="stopBtn" type="button">Stop</button>
+<button id="clearBtn" type="button">Clear</button>
 </div>
-
-<div class="side-heading" id="sideHeading">
-  <h2>Ready</h2>
-  <p>Select options and scan</p>
-</div>
-
-<div class="status" id="status">Idle</div>
-<div class="progress" id="progress"><div class="bar"></div></div>
+<div class="side-heading" id="sideHeading"><h2>Ready</h2><p>Select options and scan</p></div>
+<div class="status" id="status" aria-live="polite">Idle</div>
+<div class="progress" id="progress" aria-hidden="true"><div class="bar"></div></div>
 <div class="grid" id="grid"></div>
-
 <script>
-/* CONFIG */
-const MISS_THRESHOLD = 40;
-let STOP = false;
-
+const MISS_THRESHOLD=40;
+const PROBE_TIMEOUT_MS=5000;
+let stopped=false;
 const BASE={
-advance:"https://dl.aw.freefiremobile.com/advance/ABHotUpdates/IconCDN/other/",
-live:"https://dl.aw.freefiremobile.com/live/ABHotUpdates/IconCDN/other/"
+  advance:"https://dl.aw.freefiremobile.com/advance/ABHotUpdates/IconCDN/other/",
+  live:"https://dl.aw.freefiremobile.com/live/ABHotUpdates/IconCDN/other/"
 };
-
-/* ALL ASSETS (FINAL – COMPLETE) */
 const CATEGORY={
-
-/* OUTFITS */
-"Bundle":{patterns:[{type:"normal",prefix:"7100",start:1}]},
-"Tops":{patterns:[{type:"normal",prefix:"2030",start:1}]},
-"Bottoms":{patterns:[{type:"normal",prefix:"2040",start:1}]},
-"Shoes":{patterns:[{type:"normal",prefix:"2050",start:1}]},
-"Head Mask":{patterns:[{type:"normal",prefix:"2110",start:1}]},
-"Face Paint":{patterns:[{type:"normal",prefix:"2140",start:1}]},
-
-/* WEAPONS */
-"Weapons":{patterns:[{type:"special",prefix:"9071",start:1}]},
-"Collab Frame":{patterns:[{type:"special",prefix:"9260",start:1}]},
-"Skywing":{patterns:[{type:"special",prefix:"9110",start:1}]},
-
-/* PROFILE */
-"Avatar":{patterns:[{type:"normal",prefix:"9020",start:1}]},
-"Banner":{patterns:[{type:"normal",prefix:"9010",start:1}]},
-"Profile Pin":{
-  patterns:[
-    {type:"fixed",prefix:"910",suffix:6},
-    {type:"normal",prefix:"9100",start:1}
-  ]
-},
-"Battle Card":{patterns:[{type:"normal",prefix:"9250",start:1}]},
-
-/* EMOTES & EFFECTS */
-"Emotes":{patterns:[{type:"normal",prefix:"9090",start:1}]},
-"Super Emote":{patterns:[{type:"normal",prefix:"9095",start:1}]},
-"Final Shot":{
-  patterns:[
-    {type:"normal",prefix:"9230",start:1},
-    {type:"normal",prefix:"9230",start:2}
-  ]
-},
-
-/* VEHICLE & MOBILITY */
-"Vehicle":{patterns:[{type:"normal",prefix:"9080",start:1}]},
-"Surfboard":{patterns:[{type:"normal",prefix:"9060",start:1}]},
-"Parachute":{patterns:[{type:"normal",prefix:"9050",start:1}]},
-"Arrival Animation":{patterns:[{type:"normal",prefix:"9120",start:1}]},
-
-/* AUDIO */
-"Lobby Music":{patterns:[{type:"normal",prefix:"9130",start:1}]},
-
-/* INVENTORY */
-"Backpack":{patterns:[{type:"normal",prefix:"9040",start:1}]},
-
-/* TOKENS */
-"Token":{patterns:[{type:"normal",prefix:"8010",start:1}]},
-"Exchange Token":{patterns:[{type:"normal",prefix:"8010",start:501}]},
-
-/* PET */
-"Pet":{patterns:[{type:"fixed",prefix:"1300",suffix:6}]},
-"Pet Skill":{patterns:[{type:"fixed",prefix:"1315",suffix:6}]},
-"Pet Skin":{patterns:[{type:"fixed",prefix:"1310",suffix:6}]},
-"Pet Emote":{patterns:[{type:"fixed",prefix:"1309",suffix:6}]},
-
-/* CHARACTERS */
-"Characters":{
-  patterns:[
-    {type:"fixed",prefix:"101",suffix:6},
-    {type:"fixed",prefix:"102",suffix:6}
-  ]
-},
-
-/* CRATES */
-"Loot Box":{patterns:[{type:"normal",prefix:"9030",start:1}]},
-"Choice Crate":{patterns:[{type:"normal",prefix:"1700",start:1}]},
-"Loot Crate":{patterns:[{type:"normal",prefix:"4000",start:1}]},
-
-/* MISC */
-"Hyper Book":{patterns:[{type:"fixed",prefix:"18034",suffix:5}]},
-"Look Changer":{patterns:[{type:"normal",prefix:"9140",start:1}]},
-"Skill Skin":{patterns:[{type:"normal",prefix:"9220",start:1}]}
+  "Bundle":{patterns:[{type:"normal",prefix:"7100",start:1}]},"Tops":{patterns:[{type:"normal",prefix:"2030",start:1}]},"Bottoms":{patterns:[{type:"normal",prefix:"2040",start:1}]},"Shoes":{patterns:[{type:"normal",prefix:"2050",start:1}]},"Head Mask":{patterns:[{type:"normal",prefix:"2110",start:1}]},"Face Paint":{patterns:[{type:"normal",prefix:"2140",start:1}]},
+  "Weapons":{patterns:[{type:"special",prefix:"9071",start:1}]},"Collab Frame":{patterns:[{type:"special",prefix:"9260",start:1}]},"Skywing":{patterns:[{type:"special",prefix:"9110",start:1}]},
+  "Avatar":{patterns:[{type:"normal",prefix:"9020",start:1}]},"Banner":{patterns:[{type:"normal",prefix:"9010",start:1}]},"Profile Pin":{patterns:[{type:"fixed",prefix:"910",suffix:6},{type:"normal",prefix:"9100",start:1}]},"Battle Card":{patterns:[{type:"normal",prefix:"9250",start:1}]},
+  "Emotes":{patterns:[{type:"normal",prefix:"9090",start:1}]},"Super Emote":{patterns:[{type:"normal",prefix:"9095",start:1}]},"Final Shot":{patterns:[{type:"normal",prefix:"9230",start:1},{type:"normal",prefix:"9230",start:2}]},
+  "Vehicle":{patterns:[{type:"normal",prefix:"9080",start:1}]},"Surfboard":{patterns:[{type:"normal",prefix:"9060",start:1}]},"Parachute":{patterns:[{type:"normal",prefix:"9050",start:1}]},"Arrival Animation":{patterns:[{type:"normal",prefix:"9120",start:1}]},
+  "Lobby Music":{patterns:[{type:"normal",prefix:"9130",start:1}]},"Backpack":{patterns:[{type:"normal",prefix:"9040",start:1}]},"Token":{patterns:[{type:"normal",prefix:"8010",start:1}]},"Exchange Token":{patterns:[{type:"normal",prefix:"8010",start:501}]},
+  "Pet":{patterns:[{type:"fixed",prefix:"1300",suffix:6}]},"Pet Skill":{patterns:[{type:"fixed",prefix:"1315",suffix:6}]},"Pet Skin":{patterns:[{type:"fixed",prefix:"1310",suffix:6}]},"Pet Emote":{patterns:[{type:"fixed",prefix:"1309",suffix:6}]},
+  "Characters":{patterns:[{type:"fixed",prefix:"101",suffix:6},{type:"fixed",prefix:"102",suffix:6}]},"Loot Box":{patterns:[{type:"normal",prefix:"9030",start:1}]},"Choice Crate":{patterns:[{type:"normal",prefix:"1700",start:1}]},"Loot Crate":{patterns:[{type:"normal",prefix:"4000",start:1}]},
+  "Hyper Book":{patterns:[{type:"fixed",prefix:"18034",suffix:5}]},"Look Changer":{patterns:[{type:"normal",prefix:"9140",start:1}]},"Skill Skin":{patterns:[{type:"normal",prefix:"9220",start:1}]}
 };
-
-/* INIT */
-const ob=document.getElementById("ob");
-const cat=document.getElementById("cat");
-const grid=document.getElementById("grid");
-const status=document.getElementById("status");
-const progress=document.getElementById("progress");
-const bar=document.querySelector(".bar");
-const scanBtn=document.getElementById("scanBtn");
-const stopBtn=document.getElementById("stopBtn");
-const sideHeading=document.getElementById("sideHeading");
-
-for(let i=40;i<=60;i++) ob.innerHTML+=`<option value="${i}">OB ${i}</option>`;
-ob.value=50;
-Object.keys(CATEGORY).forEach(c=>cat.innerHTML+=`<option>${c}</option>`);
-
-function clearGrid(){
-STOP=true;
-grid.innerHTML="";
-status.textContent="Idle";
-progress.classList.remove("show");
-sideHeading.innerHTML="<h2>Ready</h2><p>Select options and scan</p>";
-}
-
-stopBtn.onclick=()=>{
-STOP=true;
-status.textContent=status.textContent.startsWith("Found")
-  ? status.textContent.replace(" • running","").replace("Found","Stopped • Found")
-  : "Stopped";
-};
-
-function genId(p,ob,i){
-if(p.type==="fixed") return p.prefix+String(i).padStart(p.suffix,"0");
-if(p.type==="special") return p.prefix+"0"+ob+String(i).padStart(2,"0");
-return p.prefix+ob+String(i).padStart(3,"0");
-}
-
-function probe(url){
-return new Promise(r=>{
-const img=new Image();
-img.onload=()=>r(true);
-img.onerror=()=>r(false);
-img.src=url;
-});
-}
-
+const ob=document.getElementById("ob"),cat=document.getElementById("cat"),grid=document.getElementById("grid"),status=document.getElementById("status"),progress=document.getElementById("progress"),bar=document.querySelector(".bar"),scanBtn=document.getElementById("scanBtn"),stopBtn=document.getElementById("stopBtn"),clearBtn=document.getElementById("clearBtn"),sideHeading=document.getElementById("sideHeading");
+for(let i=40;i<=60;i++) ob.add(new Option(`OB ${i}`,i));
+ob.value="50";
+Object.keys(CATEGORY).forEach(c=>cat.add(new Option(c,c)));
+function setStatus(text){status.textContent=text}
+function clearGrid(){stopped=true;grid.replaceChildren();bar.style.width="0%";progress.classList.remove("show");sideHeading.innerHTML="<h2>Ready</h2><p>Select options and scan</p>";setStatus("Idle")}
+stopBtn.addEventListener("click",()=>{stopped=true;if(scanBtn.disabled)setStatus(`Stopped • Found ${grid.children.length}`);});
+clearBtn.addEventListener("click",clearGrid);
+function genId(p,obv,i){if(p.type==="fixed")return p.prefix+String(i).padStart(p.suffix,"0");if(p.type==="special")return p.prefix+"0"+obv+String(i).padStart(2,"0");return p.prefix+obv+String(i).padStart(3,"0")}
+function probe(url){return new Promise(resolve=>{const img=new Image();let settled=false;const finish=value=>{if(settled)return;settled=true;clearTimeout(timer);img.onload=null;img.onerror=null;resolve(value)};const timer=setTimeout(()=>finish(false),PROBE_TIMEOUT_MS);img.onload=()=>finish(true);img.onerror=()=>finish(false);img.src=url})}
+function addCard(url,id){const card=document.createElement("div");card.className="card";const img=document.createElement("img");img.src=url;img.alt=`Free Fire icon ${id}`;img.loading="lazy";const label=document.createElement("div");label.className="id";label.textContent=id;card.append(img,label);grid.appendChild(card)}
 async function scan(){
-STOP=false;
-scanBtn.disabled=true;
-grid.innerHTML="";
-progress.classList.add("show");
-bar.style.width="0%";
-
-const cfg=CATEGORY[cat.value];
-const obv=ob.value;
-const srv=BASE[server.value];
-
-sideHeading.innerHTML=`<h2>${cat.value}</h2><p>${server.value.toUpperCase()} • OB ${obv}</p>`;
-
-let found=0,done=0;
-status.textContent="Found 0 • running";
-
-for(const p of cfg.patterns){
-let i=p.start||1,misses=0;
-while(misses<MISS_THRESHOLD && !STOP){
-const id=genId(p,obv,i++);
-const url=srv+id+".png";
-const ok=await probe(url);
-done++;
-bar.style.width=(done/(done+MISS_THRESHOLD))*100+"%";
-if(ok){
-grid.innerHTML+=`<div class="card"><img src="${url}"><div class="id">${id}</div></div>`;
-found++;
-status.textContent=`Found ${found} • running`;
-misses=0;
-}else misses++;
+  if(scanBtn.disabled)return;
+  stopped=false;scanBtn.disabled=true;grid.replaceChildren();progress.classList.add("show");bar.style.width="0%";
+  const cfg=CATEGORY[cat.value],obv=ob.value,srv=BASE[document.getElementById("server").value];
+  sideHeading.innerHTML=`<h2>${cat.value}</h2><p>${document.getElementById("server").value.toUpperCase()} • OB ${obv}</p>`;
+  let found=0,attempts=0;
+  setStatus("Found 0 • running");
+  for(const p of cfg.patterns){
+    let i=p.start||1,misses=0;
+    while(misses<MISS_THRESHOLD&&!stopped){
+      const id=genId(p,obv,i++),url=srv+id+".png";const ok=await probe(url);attempts++;
+      const progressPct=Math.min(99,(misses/MISS_THRESHOLD)*100);bar.style.width=`${progressPct}%`;
+      if(ok){addCard(url,id);found++;misses=0;setStatus(`Found ${found} • checked ${attempts}`)}else{misses++;setStatus(`Found ${found} • checked ${attempts} • ${misses}/${MISS_THRESHOLD} misses`)}
+    }
+  }
+  bar.style.width=stopped?bar.style.width:"100%";setStatus(stopped?`Stopped • Found ${found} • checked ${attempts}`:`Found ${found} • stopped after ${MISS_THRESHOLD} consecutive misses`);progress.classList.remove("show");scanBtn.disabled=false;
 }
-}
-
-status.textContent=STOP
-  ? `Stopped • Found ${found}`
-  : `Found ${found} • stopped after ${MISS_THRESHOLD} misses`;
-
-progress.classList.remove("show");
-scanBtn.disabled=false;
-}
-
-scanBtn.onclick=scan;
+scanBtn.addEventListener("click",scan);
 </script>
-<footer class="footer">
-  <span>Made by MK🤍</span>
-</footer>
-
+<footer class="footer"><span>Made by MK🤍</span></footer>
 </body>
 </html>
