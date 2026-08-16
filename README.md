@@ -1,126 +1,69 @@
 # FF Icon Extractor
 
-FF Icon Extractor is a lightweight, frontend-only tool for scanning, previewing, and downloading Free Fire icon assets using sequential item IDs.
+A lightweight, frontend-only utility for scanning, previewing and downloading Free Fire icon assets using sequential asset IDs.
 
-It is designed as a **utility tool**, not a consumer app — focused on correctness, clarity, and controlled behavior rather than flashy features.
- 
----
+## What it does
 
-## 🔧 What This Tool Does
+- Selects **Advance** or **Live** server
+- Selects an OB version
+- Selects an asset category
+- Generates category-aware asset IDs
+- Scans sequential IDs until the configured stopping condition
+- Displays discovered assets in a grid
+- Copies asset IDs
+- Downloads individual assets through browser-side Blob handling
 
-- Select Free Fire server (Advance / Live)
-- Choose OB version
-- Pick an asset category
-- Automatically scan sequential asset IDs
-- Preview available assets in a grid
-- Download individual assets securely
-- Copy asset IDs with one click
-- Clearly show context using a side heading (Category, OB, Server)
+## Workflow
 
----
+```text
+Server + OB + Category
+        ↓
+ID generation
+        ↓
+Sequential asset requests
+        ↓
+Available assets
+        ↓
+Preview → Copy ID / Download
+```
 
-## ✅ Key Features
-
-- Sequential ID scanning with automatic stop on missing assets
-- Category-aware ID generation (normal and special formats)
-- Clean, compact, mobile-friendly UI
-- Secure-only download (Blob-based, no direct navigation)
-- Copy ID functionality with cross-browser fallback
-- Images are non-interactive (cannot be opened or dragged)
-- No unnecessary features (search, bulk hacks, animations)
-
----
-
-## 🔐 Security Model & Limitations
-
-This is a **pure frontend application**.
-
-### Important limitations:
-
-- CDN URLs **cannot be fully hidden**
-- Network requests are visible in browser developer tools
-- Some mobile browsers may block secure downloads
-- ZIP downloads and screenshots are not supported
-
-### What is handled correctly:
-
-- No direct navigation to CDN URLs
-- Images cannot be clicked or opened
-- No fallback that opens assets in a new tab
-- No misleading or fake security claims
-
-> **True URL hiding requires a backend proxy.**  
-> This project intentionally avoids half-baked frontend hacks.
-
----
-
-## 🧠 Design Philosophy
-
-- Utility-first, not flashy
-- Honest behavior over broken workarounds
-- Minimal UI, minimal logic
-- Frontend kept clean and backend-ready
-- Easy to extend when a server is added
-
----
-
-## 🛠️ Tech Stack
+## Tech stack
 
 - HTML
 - CSS
 - Vanilla JavaScript
-- No frameworks
-- No build tools
-- No external dependencies
+- No framework or build step
 
----
+## Running locally
 
-## 🌐 Hosting
+Clone the repository and open the HTML entry point in a modern browser, or serve the directory through a static HTTP server.
 
-This project can be hosted on any static hosting platform:
+For the most reliable browser behavior, use HTTPS/static hosting rather than relying on `file://` URLs.
 
-- GitHub Pages (recommended)
-- Netlify
-- Cloudflare Pages
+## Important limitations
 
-⚠️ Always access the site via **HTTPS**.  
-Avoid opening the file locally using `file://` or `content://`.
+This is a frontend application. CDN requests are visible to the browser and can be inspected through developer tools. The application therefore **does not and cannot hide the underlying asset URLs**.
 
----
+Browser download behavior also varies between mobile and desktop browsers.
 
-## 🔮 Future Improvements (Optional)
+The current project does not provide ZIP export or screenshot generation.
 
-Planned only if a backend is introduced:
+## Security clarification
 
-- Backend download proxy (true URL hiding)
-- ZIP download support
-- Screenshot generation
-- Improved mobile download reliability
+Blob-based downloads prevent the application from intentionally navigating the user to an asset URL, but they are **not a mechanism for hiding the CDN URL**. True URL mediation would require a backend/proxy architecture.
 
----
+## Asset ownership
 
-## ⚠️ Disclaimer
+Free Fire names, icons and other game assets belong to their respective rights holders, including Garena. This repository is for the source code and educational/reference use; it does not claim ownership of third-party game assets.
 
-All game icons and assets are the property of their respective owners (Garena).
-This project does not distribute or claim ownership of any game assets.
-Assets are loaded dynamically from public CDNs for educational and reference purposes only.
+## Status
 
----
+The frontend implementation is intentionally feature-focused. Further changes should be driven by concrete bugs or a backend architecture rather than adding cosmetic features.
 
-## 👤 Author
+## License
 
-**Made by MK**
+See the repository license for source-code licensing terms.
 
----
+## Author
 
-## 📌 Project Status
-
-**v1 — Frontend Complete**  
-Feature-frozen until a backend is added.
-**v2 — Frontend Complete (Pattern-Based Scanning)
-Asset scanning is pattern-based (supports multiple ID formats per category)
-OB-aware logic implemented
-Manual stop control added
-UI and feature set finalized
-No further frontend features planned
-The project is feature-frozen until a backend is introduced
+**Mohith Krishnaa** — [@mohith-krishnaa](https://github.com/mohith-krishnaa)
