@@ -1,69 +1,73 @@
 # FF Icon Extractor
 
-A browser-based utility for scanning known Free Fire asset-ID patterns and previewing matching PNG icons.
+A browser-based research utility for scanning configured Free Fire asset-ID patterns and previewing matching PNG icons.
 
 **Live Demo:** https://mohith-krishnaa.github.io/Iconsextractor/
 
-> **Status:** Unofficial research utility. Asset IDs and CDN behavior can change at any time.
+> **Unofficial tool:** This project is independent of Garena. Asset IDs, CDN behavior and game-version patterns can change without notice.
 
 ## Features
 
 - Advance / Live server selection
 - OB version selection (currently OB 40–60 in the UI)
 - Category-based asset-ID generation
-- Sequential asset probing
+- Sequential candidate scanning
 - Automatic stop after consecutive misses
 - Live found-count and scan status
 - Progress indicator
-- Manual scan stop
-- Clear results
-- Responsive icon preview grid
+- Manual scan cancellation
+- Responsive preview grid
 
-## How scanning works
+## Scan flow
 
 ```text
 Server + OB + Category
           ↓
-Generate candidate asset ID
+Generate candidate ID
           ↓
-Request PNG
-          ↓
-Found → display in grid
-Missing → increase miss counter
-          ↓
-40 consecutive misses → move to next pattern / finish
+Probe configured asset URL
+      ↙           ↘
+   Found         Missing
+     ↓              ↓
+  Preview       Miss counter
+                    ↓
+             Stop / next pattern
 ```
 
-## Running locally
+## Run locally
 
 No build system or framework is required.
 
-1. Clone the repository.
-2. Open `index.html` in a modern browser, or serve the directory with a local static server.
-3. Select the server, OB version and category.
-4. Click **Scan**.
+```bash
+git clone https://github.com/mohith-krishnaa/Iconsextractor.git
+cd Iconsextractor
+```
+
+Open `index.html` in a modern browser, or serve the directory with a local static server.
 
 ## Technical notes
 
-The application uses browser `Image` loading to probe candidate PNG URLs. Requests are made directly from the user's browser to the configured asset host.
+The application uses browser image loading to probe candidate PNG URLs. Requests are made directly from the user's browser to the configured third-party asset host.
 
-The current implementation does not provide a backend proxy, ZIP exporter, screenshot exporter, or asset-ID clipboard button.
+That means the browser can inspect the requested CDN URLs. **A frontend-only application cannot secretly proxy or hide those URLs.** A backend would be required for that architecture.
+
+The current implementation intentionally does not claim to provide ZIP export, screenshot export, or server-side URL protection.
 
 ## Limitations
 
 - This is not an official Garena tool.
-- Asset availability depends on third-party game infrastructure.
-- Large scans can create many network requests and may be slow or rate-limited.
-- CDN URLs are visible to the browser and can be inspected with developer tools.
-- Hard-coded ID patterns require updates when asset conventions change.
+- Large scans can generate many network requests and may be slow or rate-limited.
+- CDN availability can change independently of this repository.
+- Hard-coded asset patterns require maintenance when conventions change.
+- A successful request does not establish ownership or licensing rights for the returned asset.
 
 ## Asset ownership
 
-Free Fire and related game assets belong to their respective rights holders, including Garena. This repository is for the source code and educational/reference purposes and does not claim ownership of third-party assets.
+Free Fire and related game assets belong to their respective rights holders, including Garena. This repository provides source code for a research/educational browser utility and does not claim ownership of third-party assets.
 
 ## License
 
-See the repository's license for source-code licensing terms.
+See `LICENSE` for the source-code licensing terms.
 
 ## Author
 
